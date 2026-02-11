@@ -1,6 +1,5 @@
-package com.example.promuldismov_tareatiendavirtual.components
+package com.example.promuldismov_tareatiendavirtual.ui.components
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,17 +20,18 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.example.promuldismov_tareatiendavirtual.data.TiendaViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
+import coil3.compose.AsyncImage
+import com.example.promuldismov_tareatiendavirtual.viewmodel.ShopViewModel
 
 
 @Composable
-fun CardProducto(
-    viewModel: TiendaViewModel,
-    onProductClick: () -> Unit,
-    @DrawableRes id: Int,
-    nombreProducto: String,
-    precioProducto: String
+fun CardProduct(
+    viewModel: ShopViewModel,
+    productName: String,
+    productPrice: Double,
+    productDescription: String,
+    imageUrl: String,
+    onProductClick: () -> Unit
 ) {
     Card( modifier = Modifier
             .padding(vertical = 8.dp)
@@ -41,8 +41,8 @@ fun CardProducto(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth().padding(16.dp)
         ) {
-            Image(
-                painter = painterResource(id),
+            AsyncImage(
+                model = imageUrl,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -55,28 +55,27 @@ fun CardProducto(
                     .padding(horizontal = 16.dp)
             ) {
                 Text(
-                    text = nombreProducto,
+                    text = productName,
                     style = MaterialTheme.typography.titleLarge,
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "$precioProducto €",
+                    text = "$productPrice €",
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.primary
                 )
             }
             Button(
                 onClick = {
-                    viewModel.actualizarImagen(id)
-                    viewModel.actualizarNombre(nombreProducto)
-                    viewModel.actualizarPrecio(precioProducto)
+                    viewModel.updateName(productName)
+                    viewModel.updatePrice(productPrice)
+                    viewModel.updateDescription(productDescription)
+                    viewModel.updateImage(imageUrl)
                     onProductClick()
                 }
             ) {
-                Text(text = "Ver")
+                Text(text = "View")
             }
-
-
         }
     }
 }
